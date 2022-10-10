@@ -1,8 +1,8 @@
 #!/bin/bash
-#PBS -N ERA5grab 
+#PBS -N regrid_grab 
 #PBS -A CESM0021 
-#PBS -l select=1:ncpus=1:mem=200GB
-#PBS -l walltime=12:00:00
+#PBS -l select=1:ncpus=1:mem=100GB
+#PBS -l walltime=06:00:00
 #PBS -k eod
 #PBS -j oe
 #PBS -q casper
@@ -31,7 +31,7 @@ for ifile in $dir_pl/*_u.*.nc; do
                 ihourOUT=$(printf "%05d" $((10#$ihour*3600)))
                 echo $ihour $ihourPS $ihourOUT
                 rm ERA5_$iyear-$imonth-$iday-$ihourOUT.nc 2> /dev/null
-                
+
                 ncks -O -d time,$ihour $Ufile Uout_$iyear-$imonth-$iday-$ihourOUT.nc
                 ncks -O -d time,$ihour $Vfile Vout_$iyear-$imonth-$iday-$ihourOUT.nc
                 ncks -O -d time,$ihour $Tfile Tout_$iyear-$imonth-$iday-$ihourOUT.nc
@@ -45,8 +45,11 @@ for ifile in $dir_pl/*_u.*.nc; do
 
                 ncrename -v SP,PS PSout_$iyear-$imonth-$iday-$ihourOUT.nc # rename SP to PS
                 mv PSout_$iyear-$imonth-$iday-$ihourOUT.nc ERA5_$iyear-$imonth-$iday-$ihourOUT.nc
+                rm Uout_$iyear-$imonth-$iday-$ihourOUT.nc
+                rm Vout_$iyear-$imonth-$iday-$ihourOUT.nc
+                rm Tout_$iyear-$imonth-$iday-$ihourOUT.nc
+                rm Qout_$iyear-$imonth-$iday-$ihourOUT.nc
         done
 done
 
 exit
-
