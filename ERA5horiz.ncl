@@ -5,10 +5,7 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/shea_util.ncl"
 
 begin
 
-print(ifile)
-print(idate)
-
-fil = addfile(ifile,"r")
+fin = addfile(ifile,"r")
 fout = "/glade/scratch/sglanvil/ERA5regridded/ERA5horiz_"+idate+".nc"
 weightsFile="/glade/work/sglanvil/CCR/regrid/weights_ERA5.nc"
 
@@ -21,11 +18,11 @@ fAtt@creation_date = systemfunc ("date")
 fileattdef( ncdf, fAtt )            ; copy file attributes
 filedimdef(ncdf,"time",-1,True)
 
-PS:=fil->PS
-U:=fil->U
-V:=fil->V
-T:=fil->T
-Q:=fil->Q
+PS:=fin->PS
+U:=fin->U
+V:=fin->V
+T:=fin->T
+Q:=fin->Q
 PS:=ESMF_regrid_with_weights(PS,weightsFile,False)
 U:=ESMF_regrid_with_weights(U,weightsFile,False)
 V:=ESMF_regrid_with_weights(V,weightsFile,False)
@@ -38,4 +35,3 @@ ncdf->T=T
 ncdf->Q=Q
 
 end
-
