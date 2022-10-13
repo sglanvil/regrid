@@ -10,12 +10,20 @@
 
 # get all variables (single timestamp 6-hrly data) into separate files 
 
-cd /glade/scratch/sglanvil/ERA5regridded/
 module load nco
 module load ncl
 
-dir_pl=/gpfs/fs1/collections/rda/data/ds633.0/e5.oper.an.pl/$iyear$imonth/ # one file per day (hourly data)
-dir_sfc=/gpfs/fs1/collections/rda/data/ds633.0/e5.oper.an.sfc/$iyear$imonth/ # one file per month (hourly data)
+# ------------ ERA5 Data ------------ 
+#mkdir -p /glade/scratch/sglanvil/ERA5regridded/
+#cd /glade/scratch/sglanvil/ERA5regridded/
+#dir_pl=/gpfs/fs1/collections/rda/data/ds633.0/e5.oper.an.pl/$iyear$imonth/ # one file per day (hourly data)
+#dir_sfc=/gpfs/fs1/collections/rda/data/ds633.0/e5.oper.an.sfc/$iyear$imonth/ # one file per month (hourly data)
+
+# ------------ ERA5.1 Data (2000-2006) ------------ 
+mkdir -p /glade/scratch/sglanvil/ERA51regridded/
+cd /glade/scratch/sglanvil/ERA51regridded/
+dir_pl=/gpfs/fs1/collections/rda/data/ds633.2/e51.oper.an.pl/$iyear$imonth/ # one file per day (hourly data)
+dir_sfc=/gpfs/fs1/collections/rda/data/ds633.2/e51.oper.an.sfc/$iyear$imonth/ # one file per month (hourly data)
 
 for ifile in $dir_pl/*_u.*.nc; do
         date=`echo $ifile | rev | cut -c 4-24 | rev`
@@ -36,14 +44,14 @@ for ifile in $dir_pl/*_u.*.nc; do
                 ncks -O -d time,$ihour $Vfile Vout_$iyear-$imonth-$iday-$ihourOUT.nc
                 ncks -O -d time,$ihour $Tfile Tout_$iyear-$imonth-$iday-$ihourOUT.nc
                 ncks -O -d time,$ihour $Qfile Qout_$iyear-$imonth-$iday-$ihourOUT.nc
-                ncks -O -d time,$ihourPS $PSfile PSout_$iyear-$imonth-$iday-$ihourOUT.nc # NOTE: PS is a monthly file
+                ncks -O -d time,$ihourPS $PSfile PSout_$iyear-$imonth-$iday-$ihourOUT.nc # ---- NOTE: PS is a monthly file
 
                 ncks -A Uout_$iyear-$imonth-$iday-$ihourOUT.nc Vout_$iyear-$imonth-$iday-$ihourOUT.nc
                 ncks -A Vout_$iyear-$imonth-$iday-$ihourOUT.nc Tout_$iyear-$imonth-$iday-$ihourOUT.nc
                 ncks -A Tout_$iyear-$imonth-$iday-$ihourOUT.nc Qout_$iyear-$imonth-$iday-$ihourOUT.nc
                 ncks -A Qout_$iyear-$imonth-$iday-$ihourOUT.nc PSout_$iyear-$imonth-$iday-$ihourOUT.nc
 
-                ncrename -v SP,PS PSout_$iyear-$imonth-$iday-$ihourOUT.nc # rename SP to PS
+                ncrename -v SP,PS PSout_$iyear-$imonth-$iday-$ihourOUT.nc # ---- NOTE: rename SP to PS
                 mv PSout_$iyear-$imonth-$iday-$ihourOUT.nc ERA5_$iyear-$imonth-$iday-$ihourOUT.nc
                 rm Uout_$iyear-$imonth-$iday-$ihourOUT.nc
                 rm Vout_$iyear-$imonth-$iday-$ihourOUT.nc
