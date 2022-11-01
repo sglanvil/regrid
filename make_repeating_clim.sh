@@ -83,3 +83,7 @@ rm ${destDir}ERA5vert_2017-02-29-?????.nc
 rm ${destDir}ERA5vert_2018-02-29-?????.nc
 rm ${destDir}ERA5vert_2019-02-29-?????.nc
 
+# ---------------------------- Check files in srcDir vs destDir (should be equal)
+ls /glade/scratch/sglanvil/ERA5regridded | wc -l
+ls /glade/scratch/sglanvil/ERA5regridded_clim_rep | wc -l
+
